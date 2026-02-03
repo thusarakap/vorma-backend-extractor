@@ -1,0 +1,14 @@
+fastapi==0.121.3
+uvicorn==0.38.0
+
+numpy==1.26.4
+pandas==2.3.3
+scipy==1.16.3
+matplotlib==3.10.7
+
+opencv-python==4.11.0.86
+opencv-contrib-python==4.11.0.86
+mediapipe==0.10.21
+
+protobuf>=4.25.3,<5
+python-multipart==0.0.20
