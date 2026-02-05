@@ -7,7 +7,6 @@ import argparse
 
 mp_pose = mp.solutions.pose
 
-
 def extract_pose_from_video(video_path: str, out_dir: str):
     print(f"[INFO] Input video: {video_path}")
     print(f"[INFO] Output dir: {out_dir}")
@@ -80,7 +79,6 @@ def extract_pose_from_video(video_path: str, out_dir: str):
 
     return json_file, np_file
 
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("video", help="Path to input video")
@@ -92,7 +90,6 @@ def main():
     args = parser.parse_args()
 
     extract_pose_from_video(args.video, args.out)
-
 
 if __name__ == "__main__":
     main()
