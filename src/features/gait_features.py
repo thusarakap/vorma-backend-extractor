@@ -8,10 +8,7 @@ HEEL = 30
 FOOT = 32
 
 
-# -------------------------------
 # Utilities
-# -------------------------------
-
 def smooth_signal(signal, window=7):
     if len(signal) < window:
         return signal
@@ -28,17 +25,11 @@ def angle_3points(a, b, c):
     )
     return np.degrees(np.arccos(np.clip(cosine, -1.0, 1.0)))
 
-
-# -------------------------------
 # Gait Feature Extraction
-# -------------------------------
-
 def extract_gait_features(keypoints: np.ndarray, fps: float = 30.0):
-    """
-    keypoints: (T, 33, 4) from MediaPipe
-    Returns dictionary of gait features
-    """
-
+   
+    # keypoints: (T, 33, 4) from MediaPipe
+    # Returns dictionary of gait features
     ankle_angles = []
     knee_angles = []
 
@@ -81,10 +72,7 @@ def extract_gait_features(keypoints: np.ndarray, fps: float = 30.0):
     foot_y       = smooth_signal(np.array(foot_y))
     ankle_y      = smooth_signal(np.array(ankle_y))
 
-    # -------------------------------
     # STEP & GAIT EVENT DETECTION
-    # -------------------------------
-
     # Vertical ankle velocity
     vel = smooth_signal(np.diff(ankle_y), window=7)
 
@@ -98,10 +86,7 @@ def extract_gait_features(keypoints: np.ndarray, fps: float = 30.0):
         (vel[:-1] > 0) & (vel[1:] < 0)
     )[0] + 1
 
-    # -------------------------------
     # Build gait cycles
-    # -------------------------------
-
     stance_ratios = []
     step_heights = []
 
@@ -128,17 +113,11 @@ def extract_gait_features(keypoints: np.ndarray, fps: float = 30.0):
             np.max(foot_y[hs:next_hs]) - np.min(foot_y[hs:next_hs])
         )
 
-    # -------------------------------
     # Cadence
-    # -------------------------------
-
     duration_sec = len(ankle_y) / fps
     cadence = (len(heel_strikes) / duration_sec) * 60 if duration_sec > 0 else 0
 
-    # -------------------------------
     # Aggregate features
-    # -------------------------------
-
     stance_ratio = float(np.mean(stance_ratios)) if stance_ratios else 0.0
     step_height  = float(np.mean(step_heights)) if step_heights else 0.0
 
@@ -158,11 +137,7 @@ def extract_gait_features(keypoints: np.ndarray, fps: float = 30.0):
 
     return _sanitize(features)
 
-
-# -------------------------------
 # Helpers
-# -------------------------------
-
 def _sanitize(features: dict):
     clean = {}
     for k, v in features.items():
@@ -171,7 +146,6 @@ def _sanitize(features: dict):
         else:
             clean[k] = float(v)
     return clean
-
 
 def _empty_features():
     return {
